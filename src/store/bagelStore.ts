@@ -3,6 +3,7 @@ import { BagelOrder, BagelBase, Shmear, EggType, MeatType, VeggieType, CheeseTyp
 
 interface BagelStore {
   order: BagelOrder;
+  getExportedImageBase64: (() => string | null) | null;
   updateBase: (base: BagelBase) => void;
   toggleToasted: () => void;
   updateShmear: (shmear: Shmear) => void;
@@ -14,6 +15,7 @@ interface BagelStore {
   updateCustomerName: (name: string) => void;
   updateNameColor: (color: string) => void;
   updateTextStyle: (style: 'colored' | 'black') => void;
+  setExportedImageBase64Function: (fn: (() => string | null) | null) => void;
   resetOrder: () => void;
   getVariantTitle: () => string;
 }
@@ -31,6 +33,7 @@ const initialOrder: BagelOrder = {
 
 export const useBagelStore = create<BagelStore>((set, get) => ({
   order: initialOrder,
+  getExportedImageBase64: null,
   
   updateBase: (base) => set((state) => ({ 
     order: { ...state.order, base } 
@@ -81,6 +84,8 @@ export const useBagelStore = create<BagelStore>((set, get) => ({
   updateTextStyle: (textStyle) => set((state) => ({ 
     order: { ...state.order, textStyle } 
   })),
+  
+  setExportedImageBase64Function: (fn) => set({ getExportedImageBase64: fn }),
   
   resetOrder: () => set({ order: initialOrder }),
   

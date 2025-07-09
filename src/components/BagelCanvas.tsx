@@ -65,8 +65,36 @@ const STROKE_CONFIG = {
 
 export const BagelCanvas: React.FC<BagelCanvasProps> = ({ className = '' }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { order } = useBagelStore();
+  const { order, setExportedImageBase64Function } = useBagelStore();
 
+  const generateExportBase64 = (): string | null => {
+    // Create a temporary high-resolution canvas for export
+    const tempCanvas = document.createElement('canvas');
+    const tempCtx = tempCanvas.getContext('2d');
+    if (!tempCtx) return null;
+    
+    tempCanvas.width = CANVAS_CONFIG.EXPORT_WIDTH;
+    tempCanvas.height = CANVAS_CONFIG.EXPORT_HEIGHT;
+    
+    // Draw customer name if provided
+    drawCustomerName(tempCtx, CANVAS_CONFIG.EXPORT_WIDTH, CANVAS_CONFIG.EXPORT_HEIGHT, true);
+    
+    // Draw ingredients
+    drawIngredients(tempCtx, CANVAS_CONFIG.EXPORT_WIDTH, CANVAS_CONFIG.EXPORT_HEIGHT, true);
+    
+    // Return base64 string without the data URL prefix
+    return tempCanvas.toDataURL('image/png').split(',')[1];
+  };
+
+  // Register the export function with the store
+  useEffect(() => {
+    setExportedImageBase64Function(generateExportBase64);
+    
+    // Cleanup function to remove the reference when component unmounts
+    return () => {
+      setExportedImageBase64Function(null);
+    };
+  }, [order, setExportedImageBase64Function]);
   const setupCanvas = (canvas: HTMLCanvasElement): CanvasRenderingContext2D | null => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return null;
@@ -493,25 +521,11 @@ export const BagelCanvas: React.FC<BagelCanvasProps> = ({ className = '' }) => {
   }, [order]);
 
   const exportPNG = (): void => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    
-    // Create a temporary high-resolution canvas for export
-    const tempCanvas = document.createElement('canvas');
-    const tempCtx = tempCanvas.getContext('2d');
-    if (!tempCtx) return;
-    
-    tempCanvas.width = CANVAS_CONFIG.EXPORT_WIDTH;
-    tempCanvas.height = CANVAS_CONFIG.EXPORT_HEIGHT;
-    
-    // Draw customer name if provided
-    drawCustomerName(tempCtx, CANVAS_CONFIG.EXPORT_WIDTH, CANVAS_CONFIG.EXPORT_HEIGHT, true);
-    
-    // Draw ingredients
-    drawIngredients(tempCtx, CANVAS_CONFIG.EXPORT_WIDTH, CANVAS_CONFIG.EXPORT_HEIGHT, true);
+    const base64 = generateExportBase64();
+    if (!base64) return;
     
     // Create download link
-    const dataURL = tempCanvas.toDataURL('image/png');
+    const dataURL = `data:image/png;base64,${base64}`;
     const downloadLink = document.createElement('a');
     downloadLink.href = dataURL;
     downloadLink.download = `bagel-order-${order.customerName || 'custom'}-${Date.now()}.png`;
