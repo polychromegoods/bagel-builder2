@@ -21,7 +21,7 @@ export const OrderSummary: React.FC = () => {
       }
 
       // POST it to Remix API
-      const response = await fetch('/apps/polychrome-bagels/api/upload-design', {
+      const response = await fetch('/apps/polychrome-bagels-full/api/upload-design', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ base64 })
