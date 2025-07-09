@@ -6,11 +6,11 @@ export const BaseSelector: React.FC = () => {
   const { order, updateBase, toggleToasted, updateCustomerName, updateNameColor } = useBagelStore();
 
   const bases: { value: BagelBase; label: string; image: string }[] = [
-    { value: 'plain', label: 'Bagel', image: '/plain bagel.png' },
-    { value: 'sesame', label: 'Sesame', image: '/sesame bagel copy.png' },
-    { value: 'raisin', label: 'Raisin', image: '/raisin bagel.png' },
-    { value: 'everything', label: 'Everything', image: '/everything bagel.png' },
-    { value: 'whole-wheat', label: 'Whole Wheat', image: '/whole wheat.png' },
+    { value: 'plain', label: 'Bagel', image: 'https://cdn.shopify.com/s/files/1/0662/0826/8374/files/plain_bagel.png?v=1752084027' },
+    { value: 'sesame', label: 'Sesame', image: 'https://cdn.shopify.com/s/files/1/0662/0826/8374/files/sesame_bagel.png?v=1752084056' },
+    { value: 'raisin', label: 'Raisin', image: 'https://cdn.shopify.com/s/files/1/0662/0826/8374/files/raisin_bagel.png?v=1752084027' },
+    { value: 'everything', label: 'Everything', image: 'https://cdn.shopify.com/s/files/1/0662/0826/8374/files/everything_bagel.png?v=1752084027' },
+    { value: 'whole-wheat', label: 'Whole Wheat', image: 'https://cdn.shopify.com/s/files/1/0662/0826/8374/files/whole_wheat.png?v=1752084026' },
   ];
 
   return (
