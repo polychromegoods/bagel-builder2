@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Add safe area padding for mobile devices */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* Ensure mobile viewport is properly handled */
+@media (max-width: 1023px) {
+  body {
+    overflow-x: hidden;
+  }
+}
